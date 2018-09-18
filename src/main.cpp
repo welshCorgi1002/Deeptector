@@ -1911,6 +1911,37 @@ else if(strcmp(input_type, "train") == 0) {
 							imshow("result", im); //show image
 							waitKey(1);
 						}
+
+
+
+
+						vector<vector<float>> xyKeypoints;
+						vector<float> xy;
+
+						for(int i=1; i<=keypoints.size(); i++) {
+		
+							if( !(i%3 == 0) ) {
+								xy.push_back(keypoints[i-1]);
+								//std::cout << "xy key : " << keypoints[i-1] << endl;
+							}
+							if(i%54 == 0) {
+								xyKeypoints.push_back(xy);
+								xy.clear();
+								//std::cout << "keypoints index : " << i-1 << endl;
+							}
+
+						}
+						/*
+						for(int i=0; i<xyKeypoints.size(); i++) {
+							for(int j=0; j<xyKeypoints[i].size(); j++){
+								std::cout << "xy key : " << xyKeypoints[i][j] << endl;
+							}
+							std::cout << "people num : " << i+1 << endl;
+						}
+						*/
+
+
+
 						// 11. show and save result
 						//cout << "people: " << shape[0] << endl;
 						if(shape[0] == 1) {
@@ -1937,7 +1968,15 @@ else if(strcmp(input_type, "train") == 0) {
 								writeFile << endl;	
 								vecs.erase(vecs.begin());
 							}
+						} else if(shape[0] > 1) {
+							for(int i=0; i<xyKeypoints.size(); i++) {
+								for(int j=0; j<xyKeypoints[i].size(); j++){
+									std::cout << "xy key : " << xyKeypoints[i][j] << endl;
+								}
+								std::cout << "people num : " << i+1 << endl;
+							} // 사람 두 명 이상인 동영상 구해서 train 해보기
 						}
+
 						//imshow("demo", im); //show image
 						//imwrite("output/result.jpg", im);//save result as jpg
 						delete [] heatmap_peaks;
